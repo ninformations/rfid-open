@@ -1,0 +1,100 @@
+"""Pro Micro nRF52840 Development Board - SMD Castellated Module"""
+
+#pragma experiment("TRAITS")
+import Electrical
+import ElectricPower
+import SPI
+import UART_Base
+import I2C
+
+from "parts/ProMicro_nRF52840/ProMicro_nRF52840.ato" import ProMicro_nRF52840_package
+
+# Pro Micro nRF52840 component with signal aliases
+# Pin numbering matches nice!nano / Pro Micro standard:
+#   Top row (pins 1-12):  TX, RX, GND, GND, SDA, SCL, D4, D5, D6, D7, D8, D9
+#   Bottom row (pins 13-24): D10, D16, D14, D15, A3, A2, A1, A0, VCC, RST, GND, RAW
+component ProMicro_nRF52840_IC from ProMicro_nRF52840_package:
+    # Top row (pins 1-12)
+    signal tx ~ pin 1
+    signal rx ~ pin 2
+    signal gnd_t1 ~ pin 3
+    signal gnd_t2 ~ pin 4
+    signal d2_sda ~ pin 5
+    signal d3_scl ~ pin 6
+    signal d4 ~ pin 7
+    signal d5 ~ pin 8
+    signal d6 ~ pin 9
+    signal d7 ~ pin 10
+    signal d8 ~ pin 11
+    signal d9 ~ pin 12
+    # Bottom row (pins 13-24)
+    signal d10 ~ pin 13
+    signal d16 ~ pin 14
+    signal d14 ~ pin 15
+    signal d15 ~ pin 16
+    signal a3 ~ pin 17
+    signal a2 ~ pin 18
+    signal a1 ~ pin 19
+    signal a0 ~ pin 20
+    signal vcc ~ pin 21
+    signal reset ~ pin 22
+    signal gnd_b ~ pin 23
+    signal raw ~ pin 24
+
+# Driver module for Pro Micro nRF52840
+# SMD castellated module (2x12 pads, 2.54mm pitch, 15.24mm row spacing)
+module ProMicro_nRF52840:
+    # Power interfaces
+    power_raw = new ElectricPower      # Input power (battery/USB)
+    power_3v3 = new ElectricPower      # 3.3V regulated output
+
+    # Communication interfaces
+    uart = new UART_Base
+    spi = new SPI
+    i2c = new I2C
+
+    # The module IC (SMD castellated)
+    ic = new ProMicro_nRF52840_IC
+
+    # Ground reference
+    signal _gnd
+    ic.gnd_t1 ~ _gnd
+    ic.gnd_t2 ~ _gnd
+    ic.gnd_b ~ _gnd
+
+    # Power connections
+    power_raw.vcc ~ ic.raw
+    power_raw.gnd ~ _gnd
+    power_3v3.vcc ~ ic.vcc
+    power_3v3.gnd ~ _gnd
+
+    # Reset
+    signal reset ~ ic.reset
+
+    # UART interface (D1=TX, D0=RX)
+    uart.tx.line ~ ic.tx
+    uart.rx.line ~ ic.rx
+
+    # SPI interface
+    spi.mosi.line ~ ic.d16
+    spi.miso.line ~ ic.d14
+    spi.sclk.line ~ ic.d15
+
+    # I2C interface
+    i2c.sda.line ~ ic.d2_sda
+    i2c.scl.line ~ ic.d3_scl
+
+    # GPIO pins for user connections
+    signal gpio4 ~ ic.d4
+    signal gpio5 ~ ic.d5
+    signal gpio6 ~ ic.d6
+    signal gpio7 ~ ic.d7
+    signal gpio8 ~ ic.d8
+    signal gpio9 ~ ic.d9
+    signal gpio10 ~ ic.d10
+
+    # Analog pins
+    signal adc0 ~ ic.a0
+    signal adc1 ~ ic.a1
+    signal adc2 ~ ic.a2
+    signal adc3 ~ ic.a3

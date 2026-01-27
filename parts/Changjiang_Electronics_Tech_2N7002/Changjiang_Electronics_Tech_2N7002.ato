@@ -1,0 +1,21 @@
+#pragma experiment("TRAITS")
+import has_designator_prefix
+import has_part_picked
+import is_atomic_part
+import is_auto_generated
+
+component Changjiang_Electronics_Tech_2N7002_package:
+    """2N7002 7002"""
+
+    # This trait marks this file as auto-generated
+    # If you want to manually change it, remove the trait
+    trait is_auto_generated<system="ato_part", source="easyeda:C8545", date="2026-01-27T05:20:06.236531+00:00", checksum="8ded5deaf8fbc507dec4d5df2395924ad05d84f150b82a103e88f7145bc5c498">
+
+    trait is_atomic_part<manufacturer="Changjiang Electronics Tech ", partnumber="2N7002", footprint="SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR.kicad_mod", symbol="2N7002.kicad_sym", model="SOT-23-3P_L2.9-W1.3-H1.0-LS2.4-P0.95.step">
+    trait has_part_picked::by_supplier<supplier_id="lcsc", supplier_partno="C8545", manufacturer="Changjiang Electronics Tech ", partno="2N7002">
+    trait has_designator_prefix<prefix="Q">
+
+    # pins
+    signal D ~ pin 3
+    signal G ~ pin 1
+    signal S ~ pin 2

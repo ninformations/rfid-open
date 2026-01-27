@@ -1,0 +1,65 @@
+"""Bidirectional Level Shifter for UART/GPIO"""
+
+#pragma experiment("TRAITS")
+import Electrical
+import ElectricPower
+import Resistor
+
+from "parts/onsemi_BSS138/onsemi_BSS138.ato" import onsemi_BSS138_package
+
+# Single-channel bidirectional level shifter
+module LevelShifterChannel:
+    power_lv = new ElectricPower
+    power_hv = new ElectricPower
+
+    signal lv_io
+    signal hv_io
+
+    mosfet = new onsemi_BSS138_package
+
+    r_lv = new Resistor
+    r_lv.resistance = 10kohms +/- 5%
+    r_lv.package = "R0402"
+
+    r_hv = new Resistor
+    r_hv.resistance = 10kohms +/- 5%
+    r_hv.package = "R0402"
+
+    signal _gnd
+    power_lv.gnd ~ _gnd
+    power_hv.gnd ~ _gnd
+
+    mosfet.G ~ power_lv.vcc
+    mosfet.S ~ lv_io
+    mosfet.D ~ hv_io
+
+    power_lv.vcc ~ r_lv.p1
+    r_lv.p2 ~ lv_io
+
+    power_hv.vcc ~ r_hv.p1
+    r_hv.p2 ~ hv_io
+
+
+# Dual-channel UART level shifter
+module UARTLevelShifter:
+    power_lv = new ElectricPower
+    power_hv = new ElectricPower
+
+    signal lv_tx
+    signal lv_rx
+    signal hv_tx
+    signal hv_rx
+
+    tx_shifter = new LevelShifterChannel
+    rx_shifter = new LevelShifterChannel
+
+    power_lv ~ tx_shifter.power_lv
+    power_hv ~ tx_shifter.power_hv
+    power_lv ~ rx_shifter.power_lv
+    power_hv ~ rx_shifter.power_hv
+
+    lv_tx ~ tx_shifter.lv_io
+    tx_shifter.hv_io ~ hv_rx
+
+    hv_tx ~ rx_shifter.hv_io
+    rx_shifter.lv_io ~ lv_rx

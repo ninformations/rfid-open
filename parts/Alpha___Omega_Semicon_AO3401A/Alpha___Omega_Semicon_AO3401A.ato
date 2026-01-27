@@ -1,0 +1,21 @@
+#pragma experiment("TRAITS")
+import has_designator_prefix
+import has_part_picked
+import is_atomic_part
+import is_auto_generated
+
+component Alpha___Omega_Semicon_AO3401A_package:
+    """AO3401A"""
+
+    # This trait marks this file as auto-generated
+    # If you want to manually change it, remove the trait
+    trait is_auto_generated<system="ato_part", source="easyeda:C15127", date="2026-01-27T05:20:00.183420+00:00", checksum="fc064f7cdf5a8863a5d9957e23933247da3c1226eb7b92aea3afad406025e920">
+
+    trait is_atomic_part<manufacturer="Alpha & Omega Semicon", partnumber="AO3401A", footprint="SOT-23_L2.9-W1.3-P1.90-LS2.4-BR.kicad_mod", symbol="AO3401A.kicad_sym", model="SOT-23-3P_L2.9-W1.3-H1.0-LS2.4-P0.95.step">
+    trait has_part_picked::by_supplier<supplier_id="lcsc", supplier_partno="C15127", manufacturer="Alpha & Omega Semicon", partno="AO3401A">
+    trait has_designator_prefix<prefix="Q">
+
+    # pins
+    signal D ~ pin 3
+    signal G ~ pin 1
+    signal S ~ pin 2

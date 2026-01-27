@@ -1,0 +1,19 @@
+#pragma experiment("TRAITS")
+import has_designator_prefix
+import has_part_picked
+import is_atomic_part
+import is_auto_generated
+
+component onsemi_BSS138_package:
+    # This trait marks this file as auto-generated
+    # If you want to manually change it, remove the trait
+    trait is_auto_generated<system="ato_part", source="easyeda:C52895", date="2026-01-27T05:19:45.584287+00:00", checksum="978284bd94c5e0468d8e4cb5bd0ee15e86ef09c09182b3ef93679bdcf0410f92">
+
+    trait is_atomic_part<manufacturer="onsemi", partnumber="BSS138", footprint="SOT-23-3_L2.9-W1.6-P1.90-LS2.8-BR.kicad_mod", symbol="BSS138_C52895.kicad_sym", model="SOT-23-3L_L2.9-W1.6-H1.1-LS2.8-P0.95.step">
+    trait has_part_picked::by_supplier<supplier_id="lcsc", supplier_partno="C52895", manufacturer="onsemi", partno="BSS138">
+    trait has_designator_prefix<prefix="Q">
+
+    # pins
+    signal D ~ pin 3
+    signal G ~ pin 1
+    signal S ~ pin 2

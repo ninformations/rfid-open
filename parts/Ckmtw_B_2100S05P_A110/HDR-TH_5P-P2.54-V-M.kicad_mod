@@ -1,0 +1,177 @@
+(footprint "Ckmtw_B_2100S05P_A110:HDR-TH_5P-P2.54-V-M"
+    (layer "F.Cu")
+    (descr "")
+    (version 20241229)
+    (generator "faebryk")
+    (generator_version "v5")
+    (tedit "5DC5F6A4")
+    (property "Reference" "REF**"
+        (at 0 -4 0)
+        (layer "F.SilkS")
+        (hide no)
+        (uuid "3dd32fba-613b-48aa-853f-85270c7167c0")
+        (effects
+            (font
+                (size 1 1)
+                (thickness 0.15)
+            )
+        )
+    )
+    (property "Value" "HDR-TH_5P-P2.54-V-M"
+        (at 0 4 0)
+        (layer "F.Fab")
+        (hide no)
+        (uuid "30f5a763-5632-4e8e-b9ff-ea641d44ca2f")
+        (effects
+            (font
+                (size 1 1)
+                (thickness 0.15)
+            )
+        )
+    )
+    (property "checksum" "51056c852fd16f601e3beaedcfcf75f9a3c5751a35ef2ddc8231ba880c76f68e"
+        (at 0 0 0)
+        (layer "User.9")
+        (hide no)
+        (uuid "58b1e152-0179-439b-aa7c-b853db61a5a7")
+        (effects
+            (font
+                (size 0.125 0.125)
+                (thickness 0.01875)
+            )
+            (hide yes)
+        )
+    )
+    (attr through_hole)
+    (fp_line
+        (start 6.35 -1.27)
+        (end 6.35 1.27)
+        (stroke
+            (width 0.25)
+            (type solid)
+        )
+        (layer "F.SilkS")
+        (uuid "34e1da66-65e0-4af2-bbe7-07aa0e3ef4c7")
+    )
+    (fp_line
+        (start 6.35 1.27)
+        (end -6.35 1.27)
+        (stroke
+            (width 0.25)
+            (type solid)
+        )
+        (layer "F.SilkS")
+        (uuid "e3e91094-58af-47f0-a9b7-2dd775888b1b")
+    )
+    (fp_line
+        (start -6.35 1.27)
+        (end -6.35 -1.27)
+        (stroke
+            (width 0.25)
+            (type solid)
+        )
+        (layer "F.SilkS")
+        (uuid "29059697-fe3c-4906-91b2-d7b55c096362")
+    )
+    (fp_line
+        (start -6.35 -1.27)
+        (end 6.35 -1.27)
+        (stroke
+            (width 0.25)
+            (type solid)
+        )
+        (layer "F.SilkS")
+        (uuid "059e1642-861e-40fe-b3d5-cbe778e55683")
+    )
+    (fp_line
+        (start -3.79 -1.27)
+        (end -3.79 1.27)
+        (stroke
+            (width 0.25)
+            (type solid)
+        )
+        (layer "F.SilkS")
+        (uuid "831934cb-f340-4b15-9231-edb6f835ed67")
+    )
+    (fp_circle
+        (center -6.35 1.27)
+        (end -6.32 1.27)
+        (stroke
+            (width 0.06)
+            (type solid)
+        )
+        (fill no)
+        (layer "F.Fab")
+        (uuid "ff60c037-8415-42c2-8c59-6f996291a20c")
+    )
+    (fp_text user "%R"
+        (at 0 0 0)
+        (layer "F.Fab")
+        (uuid "e342f2a1-0981-4508-ac4a-a6ede43d3199")
+        (effects
+            (font
+                (size 1 1)
+                (thickness 0.15)
+            )
+        )
+        (unlocked no)
+    )
+    (fp_text user "${REFERENCE}"
+        (at 0 -4 0)
+        (layer "F.SilkS")
+        (uuid "3dd32fba-613b-48aa-853f-85270c7167c0")
+        (effects
+            (font
+                (size 1 1)
+                (thickness 0.15)
+            )
+        )
+        (unlocked no)
+    )
+    (pad "1" thru_hole rect
+        (at -5.08 0 0)
+        (size 1.7 1.7)
+        (drill 1.1000231999999999)
+        (layers "*.Cu" "*.Mask")
+        (uuid "7c7ef8c6-485d-4f6a-8b12-a85de5e4f839")
+    )
+    (pad "2" thru_hole circle
+        (at -2.54 0 0)
+        (size 1.7 1.7)
+        (drill 1.1000231999999999)
+        (layers "*.Cu" "*.Mask")
+        (uuid "0da01367-d67a-4c6c-915e-1c4bb70049ab")
+    )
+    (pad "3" thru_hole circle
+        (at 0 0 0)
+        (size 1.7 1.7)
+        (drill 1.1000231999999999)
+        (layers "*.Cu" "*.Mask")
+        (uuid "fdeaf8a6-4e1b-40da-9a0c-a62d6c68a895")
+    )
+    (pad "4" thru_hole circle
+        (at 2.54 0 0)
+        (size 1.7 1.7)
+        (drill 1.1000231999999999)
+        (layers "*.Cu" "*.Mask")
+        (uuid "74cedd11-32d8-4a4e-b86a-017b9a210c87")
+    )
+    (pad "5" thru_hole circle
+        (at 5.08 0 0)
+        (size 1.7 1.7)
+        (drill 1.1000231999999999)
+        (layers "*.Cu" "*.Mask")
+        (uuid "c5cfadd5-48f3-4535-bb0f-372041b4e2d1")
+    )
+    (model "${KIPRJMOD}/../../parts/Ckmtw_B_2100S05P_A110/HDR-TH_5P-P2.54-M-LI-1X5P.step"
+        (offset
+            (xyz 0 0 0)
+        )
+        (scale
+            (xyz 1 1 1)
+        )
+        (rotate
+            (xyz 0 0 0)
+        )
+    )
+)

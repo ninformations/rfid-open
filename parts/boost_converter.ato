@@ -1,0 +1,66 @@
+"""5V Boost Converter Module for LiPo Battery"""
+
+#pragma experiment("TRAITS")
+import Electrical
+import ElectricPower
+import Resistor
+import Capacitor
+import Inductor
+
+from "parts/XI_AN_Aerosemi_Tech_MT3608/XI_AN_Aerosemi_Tech_MT3608.ato" import XI_AN_Aerosemi_Tech_MT3608_package
+from "parts/MDD_Microdiode_Electronics_SS34/MDD_Microdiode_Electronics_SS34.ato" import MDD_Microdiode_Electronics_SS34_package
+
+# 5V Boost converter module
+module BoostConverter5V:
+    power_in = new ElectricPower
+    power_out = new ElectricPower
+    signal enable
+
+    ic = new XI_AN_Aerosemi_Tech_MT3608_package
+    diode = new MDD_Microdiode_Electronics_SS34_package
+
+    c_in = new Capacitor
+    c_in.capacitance = 22uF +/- 20%
+    c_in.package = "C0805"
+
+    c_out1 = new Capacitor
+    c_out1.capacitance = 22uF +/- 20%
+    c_out1.package = "C0805"
+
+    c_out2 = new Capacitor
+    c_out2.capacitance = 22uF +/- 20%
+    c_out2.package = "C0805"
+
+    l_boost = new Inductor
+    l_boost.inductance = 22uH +/- 20%
+
+    r_fb1 = new Resistor
+    r_fb1.resistance = 220kohms +/- 1%
+    r_fb1.package = "R0402"
+
+    r_fb2 = new Resistor
+    r_fb2.resistance = 30kohms +/- 1%
+    r_fb2.package = "R0402"
+
+    signal _gnd
+    ic.GND ~ _gnd
+    power_in.gnd ~ _gnd
+    power_out.gnd ~ _gnd
+
+    power_in.vcc ~ ic.IN
+    power_in ~ c_in.power
+
+    enable ~ ic.EN
+
+    power_in.vcc ~ l_boost.p1
+    l_boost.p2 ~ ic.SW
+    ic.SW ~ diode.A
+    diode.K ~ power_out.vcc
+
+    power_out ~ c_out1.power
+    power_out ~ c_out2.power
+
+    power_out.vcc ~ r_fb1.p1
+    r_fb1.p2 ~ ic.FB
+    ic.FB ~ r_fb2.p1
+    r_fb2.p2 ~ _gnd

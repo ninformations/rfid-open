@@ -1,0 +1,18 @@
+#pragma experiment("TRAITS")
+import has_designator_prefix
+import has_part_picked
+import is_atomic_part
+import is_auto_generated
+
+component SXN_SMMS0630_220M_package:
+    # This trait marks this file as auto-generated
+    # If you want to manually change it, remove the trait
+    trait is_auto_generated<system="ato_part", source="easyeda:C128694", date="2026-01-27T07:01:34.951484+00:00", checksum="80ac52c2d620b1b54fe1265d82d5fbfbe0d98a8250a0c5d025b86230f96ca10d">
+
+    trait is_atomic_part<manufacturer="SXN", partnumber="SMMS0630-220M", footprint="IND-SMD_L7.3-W6.6_MHCI06030.kicad_mod", symbol="SMMS0630-220M.kicad_sym", model="IND-SMD_L7.1-W6.6-H2.8.step">
+    trait has_part_picked::by_supplier<supplier_id="lcsc", supplier_partno="C128694", manufacturer="SXN", partno="SMMS0630-220M">
+    trait has_designator_prefix<prefix="L">
+
+    # pins
+    pin 2
+    pin 1

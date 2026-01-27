@@ -1,0 +1,34 @@
+#pragma experiment("TRAITS")
+import has_designator_prefix
+import is_atomic_part
+
+component ProMicro_nRF52840_package:
+    trait is_atomic_part<manufacturer="Nice Keyboards", partnumber="nice!nano v2", footprint="ProMicro_nRF52840.kicad_mod", symbol="ProMicro_nRF52840.kicad_sym">
+    trait has_designator_prefix<prefix="U">
+
+    # Left side pins (1-12)
+    pin 1
+    pin 2
+    pin 3
+    pin 4
+    pin 5
+    pin 6
+    pin 7
+    pin 8
+    pin 9
+    pin 10
+    pin 11
+    pin 12
+    # Right side pins (13-24)
+    pin 13
+    pin 14
+    pin 15
+    pin 16
+    pin 17
+    pin 18
+    pin 19
+    pin 20
+    pin 21
+    pin 22
+    pin 23
+    pin 24

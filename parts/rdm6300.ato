@@ -1,0 +1,52 @@
+"""RDM6300 125KHz RFID Reader Module"""
+
+#pragma experiment("TRAITS")
+import Electrical
+import ElectricPower
+import UART_Base
+
+from "parts/Ckmtw_B_2100S05P_A110/Ckmtw_B_2100S05P_A110.ato" import Ckmtw_B_2100S05P_A110_package
+from "parts/Ckmtw_B_2100S02P_A110/Ckmtw_B_2100S02P_A110.ato" import Ckmtw_B_2100S02P_A110_package
+
+# 1x5 pin header with signal aliases
+component PinHeader_1x5 from Ckmtw_B_2100S05P_A110_package:
+    signal p1 ~ pin 1
+    signal p2 ~ pin 2
+    signal p3 ~ pin 3
+    signal p4 ~ pin 4
+    signal p5 ~ pin 5
+
+# 1x2 pin header with signal aliases
+component PinHeader_1x2 from Ckmtw_B_2100S02P_A110_package:
+    signal p1 ~ pin 1
+    signal p2 ~ pin 2
+
+# Driver module for RDM6300
+# RDM6300 Pinout:
+# Pin 1: VCC (5V)
+# Pin 2: GND
+# Pin 3: TX (data output at 9600 baud)
+# Pin 4: RX (not used typically)
+# Pin 5: ANT1 (antenna coil)
+# Pin 6: ANT2 (antenna coil) - separate connector
+module RDM6300:
+    # External interfaces
+    power = new ElectricPower
+    uart = new UART_Base
+
+    # Connectors
+    main_header = new PinHeader_1x5
+    ant_header = new PinHeader_1x2
+
+    # Power connections
+    power.vcc ~ main_header.p1      # VCC
+    power.gnd ~ main_header.p2      # GND
+
+    # UART connections (RDM6300 TX -> MCU RX)
+    uart.rx.line ~ main_header.p3   # RDM6300 TX output
+    uart.tx.line ~ main_header.p4   # RDM6300 RX input (usually unused)
+
+    # Antenna coil connection (directly on header)
+    signal ant1 ~ main_header.p5
+    signal ant2 ~ ant_header.p1
+    ant_header.p2 ~ power.gnd       # Antenna ground reference

@@ -1,0 +1,171 @@
+(footprint "Alpha___Omega_Semicon_AO3401A:SOT-23_L2.9-W1.3-P1.90-LS2.4-BR"
+    (layer "F.Cu")
+    (descr "")
+    (version 20241229)
+    (generator "faebryk")
+    (generator_version "v5")
+    (tedit "5DC5F6A4")
+    (property "Reference" "REF**"
+        (at 0 -4.95 0)
+        (layer "F.SilkS")
+        (hide no)
+        (uuid "3d523c48-cf8d-474e-8af2-af2ac1a302f3")
+        (effects
+            (font
+                (size 1 1)
+                (thickness 0.15)
+            )
+        )
+    )
+    (property "Value" "SOT-23_L2.9-W1.3-P1.90-LS2.4-BR"
+        (at 0 4.95 0)
+        (layer "F.Fab")
+        (hide no)
+        (uuid "d3f4ef93-911e-415b-bc62-e17980b9751b")
+        (effects
+            (font
+                (size 1 1)
+                (thickness 0.15)
+            )
+        )
+    )
+    (property "checksum" "636fe8234e2b2d49ae858e78449548dbf15019d01c7c24338a4e9e45bae2aa53"
+        (at 0 0 0)
+        (layer "User.9")
+        (hide no)
+        (uuid "3ac3e813-e44b-45ef-bd94-db8962a1fe1e")
+        (effects
+            (font
+                (size 0.125 0.125)
+                (thickness 0.01875)
+            )
+            (hide yes)
+        )
+    )
+    (attr smd)
+    (fp_line
+        (start -0.7 -0.64)
+        (end -0.7 -1.5)
+        (stroke
+            (width 0.25)
+            (type solid)
+        )
+        (layer "F.SilkS")
+        (uuid "913fd6b5-137a-443a-aaf7-e6d6a7818dc8")
+    )
+    (fp_line
+        (start -0.7 -1.5)
+        (end 0.3 -1.5)
+        (stroke
+            (width 0.25)
+            (type solid)
+        )
+        (layer "F.SilkS")
+        (uuid "5edeb9d0-e061-40ea-aeda-b46c2ba83273")
+    )
+    (fp_line
+        (start 0.7 0.31)
+        (end 0.7 -0.32)
+        (stroke
+            (width 0.25)
+            (type solid)
+        )
+        (layer "F.SilkS")
+        (uuid "c4af7383-0735-4dd1-afb0-e8d219cbd395")
+    )
+    (fp_line
+        (start -0.7 1.5)
+        (end -0.7 0.63)
+        (stroke
+            (width 0.25)
+            (type solid)
+        )
+        (layer "F.SilkS")
+        (uuid "a3a2001a-39de-4bbe-a582-8e5cb64b9f24")
+    )
+    (fp_line
+        (start -0.7 1.5)
+        (end 0.3 1.5)
+        (stroke
+            (width 0.25)
+            (type solid)
+        )
+        (layer "F.SilkS")
+        (uuid "1e93eda6-a64f-4383-a13d-d3fcaf4f3abc")
+    )
+    (fp_circle
+        (center 1.2 1.45)
+        (end 1.23 1.45)
+        (stroke
+            (width 0.06)
+            (type solid)
+        )
+        (fill no)
+        (layer "F.Fab")
+        (uuid "d10baa4d-6356-4a3e-9227-184e2d1bb42c")
+    )
+    (fp_circle
+        (center 1.75 0.94)
+        (end 1.9 0.94)
+        (stroke
+            (width 0.3)
+            (type solid)
+        )
+        (fill no)
+        (layer "Cmts.User")
+        (uuid "2f319716-82d6-4060-8e3d-edbf6f12ba95")
+    )
+    (fp_text user "%R"
+        (at 0 0 0)
+        (layer "F.Fab")
+        (uuid "c5d24468-5b96-425b-9943-6e8029cfbf78")
+        (effects
+            (font
+                (size 1 1)
+                (thickness 0.15)
+            )
+        )
+        (unlocked no)
+    )
+    (fp_text user "${REFERENCE}"
+        (at 0 -4.95 0)
+        (layer "F.SilkS")
+        (uuid "3d523c48-cf8d-474e-8af2-af2ac1a302f3")
+        (effects
+            (font
+                (size 1 1)
+                (thickness 0.15)
+            )
+        )
+        (unlocked no)
+    )
+    (pad "2" smd rect
+        (at 1.15 -0.95 180)
+        (size 1 0.8)
+        (layers "F.Cu" "F.Paste" "F.Mask")
+        (uuid "c432c2ed-49d3-4bc0-8eb5-5ca3a8f58aca")
+    )
+    (pad "3" smd rect
+        (at -1.15 0 180)
+        (size 1 0.8)
+        (layers "F.Cu" "F.Paste" "F.Mask")
+        (uuid "3af4fe5d-50fa-498f-a1b1-9f5689ff3610")
+    )
+    (pad "1" smd rect
+        (at 1.15 0.95 180)
+        (size 1 0.8)
+        (layers "F.Cu" "F.Paste" "F.Mask")
+        (uuid "ee4e11e8-7f7f-45d2-98fe-ecce3c3f6599")
+    )
+    (model "${KIPRJMOD}/../../parts/Alpha___Omega_Semicon_AO3401A/SOT-23-3P_L2.9-W1.3-H1.0-LS2.4-P0.95.step"
+        (offset
+            (xyz 0 0 0)
+        )
+        (scale
+            (xyz 1 1 1)
+        )
+        (rotate
+            (xyz 0 0 180)
+        )
+    )
+)

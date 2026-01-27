@@ -1,0 +1,68 @@
+"""Wio SX1262 LoRa Module (Seeed Studio) - SMD Castellated Module"""
+
+#pragma experiment("TRAITS")
+import Electrical
+import ElectricPower
+import SPI
+
+from "parts/WioSX1262/WioSX1262.ato" import WioSX1262_package
+
+# Wio SX1262 component with signal aliases
+component WioSX1262_IC from WioSX1262_package:
+    # Left side (pins 1-6)
+    signal rf_sw1 ~ pin 1
+    signal miso ~ pin 2
+    signal mosi ~ pin 3
+    signal sck ~ pin 4
+    signal rst ~ pin 5
+    signal nss ~ pin 6
+    # Right side (pins 7-12)
+    signal gnd1 ~ pin 7
+    signal vcc ~ pin 8
+    signal ant ~ pin 9
+    signal gnd2 ~ pin 10
+    signal busy ~ pin 11
+    signal dio1 ~ pin 12
+
+# Driver module for Wio SX1262
+# Bare module with 12 castellated SMD pads (2x6, 1.27mm pitch)
+# Left side: RF_SW1, MISO, MOSI, SCK, RST, NSS
+# Right side: GND1, VCC, ANT, GND2, BUSY, DIO1
+module WioSX1262:
+    # External interfaces
+    power = new ElectricPower
+    spi = new SPI
+
+    # Control signals
+    signal reset
+    signal busy
+    signal dio1
+    signal cs
+    signal rf_sw1
+
+    # The module IC (SMD castellated)
+    ic = new WioSX1262_IC
+
+    # Ground reference
+    signal _gnd
+    ic.gnd1 ~ _gnd
+    ic.gnd2 ~ _gnd
+
+    # Power connections
+    power.vcc ~ ic.vcc
+    power.gnd ~ _gnd
+
+    # SPI connections
+    spi.mosi.line ~ ic.mosi
+    spi.miso.line ~ ic.miso
+    spi.sclk.line ~ ic.sck
+    cs ~ ic.nss
+
+    # Control connections
+    reset ~ ic.rst
+    busy ~ ic.busy
+    dio1 ~ ic.dio1
+    rf_sw1 ~ ic.rf_sw1
+
+    # Antenna (module has own antenna connector)
+    signal antenna ~ ic.ant

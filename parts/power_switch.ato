@@ -1,0 +1,48 @@
+"""High-Side Power Switch for Load Control"""
+
+#pragma experiment("TRAITS")
+import Electrical
+import ElectricPower
+import Resistor
+
+from "parts/Alpha___Omega_Semicon_AO3401A/Alpha___Omega_Semicon_AO3401A.ato" import Alpha___Omega_Semicon_AO3401A_package
+from "parts/Changjiang_Electronics_Tech_2N7002/Changjiang_Electronics_Tech_2N7002.ato" import Changjiang_Electronics_Tech_2N7002_package
+
+# High-side power switch module
+module HighSidePowerSwitch:
+    power_in = new ElectricPower
+    power_out = new ElectricPower
+    signal enable
+
+    pfet = new Alpha___Omega_Semicon_AO3401A_package
+    nfet = new Changjiang_Electronics_Tech_2N7002_package
+
+    r_pullup = new Resistor
+    r_pullup.resistance = 10kohms +/- 5%
+    r_pullup.package = "R0402"
+
+    r_gate = new Resistor
+    r_gate.resistance = 1kohms +/- 5%
+    r_gate.package = "R0402"
+
+    r_ngate = new Resistor
+    r_ngate.resistance = 10kohms +/- 5%
+    r_ngate.package = "R0402"
+
+    signal _gnd
+    power_in.gnd ~ _gnd
+    power_out.gnd ~ _gnd
+
+    power_in.vcc ~ pfet.S
+    pfet.D ~ power_out.vcc
+
+    power_in.vcc ~ r_pullup.p1
+    r_pullup.p2 ~ pfet.G
+
+    r_gate.p1 ~ pfet.G
+
+    nfet.S ~ _gnd
+    nfet.D ~ r_gate.p2
+
+    enable ~ r_ngate.p1
+    r_ngate.p2 ~ nfet.G

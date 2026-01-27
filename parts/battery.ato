@@ -1,0 +1,20 @@
+"""LiPo Battery Connector"""
+
+#pragma experiment("TRAITS")
+import Electrical
+import ElectricPower
+
+from "parts/JST_Sales_America_S2B_PH_K_S_LF__SN/JST_Sales_America_S2B_PH_K_S_LF__SN.ato" import JST_Sales_America_S2B_PH_K_S_LF__SN_package
+
+# JST-PH 2-pin connector with signal aliases
+component JST_PH_2Pin from JST_Sales_America_S2B_PH_K_S_LF__SN_package:
+    signal p1 ~ pin 1
+    signal p2 ~ pin 2
+
+# LiPo battery module
+module LiPoBattery:
+    power = new ElectricPower
+    connector = new JST_PH_2Pin
+
+    power.vcc ~ connector.p1
+    power.gnd ~ connector.p2

@@ -1,4 +1,167 @@
-"""Brand new atopile project!"""
+"""
+RFID-ATO: 125KHz RFID Reader with Meshtastic LoRa Transmission
+
+This circuit reads RFID tags using an RDM6300 module and transmits
+the data over a Meshtastic mesh network via a Wio SX1262 LoRa module.
+The system is powered by a LiPo battery with a boost converter for 5V.
+
+Features:
+- Software-controlled power to RDM6300 for power saving
+- Meshtastic commands can enable/disable RFID reader
+- Default state: RDM6300 OFF (power conserving)
+- Level-shifted UART for safe 3.3V/5V communication
+
+Components:
+- Pro Micro nRF52840: Main microcontroller (3.3V logic)
+- RDM6300: 125KHz RFID reader (5V logic)
+- Wio SX1262: LoRa module for Meshtastic (3.3V)
+- LiPo Battery: 3.7V power source
+- Boost Converter: Steps up to 5V for RDM6300
+- Power Switch: MOSFET-based power control for RDM6300
+- Level Shifter: BSS138-based UART level translation
+"""
+
+#pragma experiment("TRAITS")
+#pragma experiment("FOR_LOOP")
+#pragma experiment("BRIDGE_CONNECT")
+
+import ElectricPower
+import SPI
+import UART_Base
+import Capacitor
+import Resistor
+
+from "parts/pro_micro_nrf52840.ato" import ProMicro_nRF52840
+from "parts/rdm6300.ato" import RDM6300
+from "parts/wio_sx1262.ato" import WioSX1262
+from "parts/boost_converter.ato" import BoostConverter5V
+from "parts/battery.ato" import LiPoBattery
+from "parts/power_switch.ato" import HighSidePowerSwitch
+from "parts/level_shifter.ato" import UARTLevelShifter
 
 module App:
-    pass
+    # ==========================================
+    # Power Section
+    # ==========================================
+
+    # LiPo battery (3.7V nominal)
+    battery = new LiPoBattery
+
+    # Boost converter: 3.7V -> 5V for RFID reader
+    boost = new BoostConverter5V
+
+    # Power switch for RDM6300 (software controllable)
+    rfid_power_switch = new HighSidePowerSwitch
+
+    # Power rails
+    power_battery = new ElectricPower   # 3.7V from battery
+    power_5v = new ElectricPower        # 5V from boost converter
+    power_5v_switched = new ElectricPower  # 5V switched for RDM6300
+    power_3v3 = new ElectricPower       # 3.3V from MCU regulator
+
+    # Battery to boost converter input
+    battery.power ~ power_battery
+    power_battery ~ boost.power_in
+
+    # Always enable boost converter (tie EN to VIN)
+    boost.enable ~ power_battery.vcc
+
+    # Boost converter output is 5V rail
+    boost.power_out ~ power_5v
+
+    # Power switch: 5V -> switched 5V for RDM6300
+    power_5v ~ rfid_power_switch.power_in
+    rfid_power_switch.power_out ~ power_5v_switched
+
+    # ==========================================
+    # Microcontroller Section
+    # ==========================================
+
+    # Pro Micro nRF52840
+    mcu = new ProMicro_nRF52840
+
+    # Power the MCU from battery (it has onboard 3.3V regulator)
+    power_battery ~ mcu.power_raw
+
+    # 3.3V output from MCU for LoRa module
+    mcu.power_3v3 ~ power_3v3
+
+    # ==========================================
+    # RFID Reader Section (with power control)
+    # ==========================================
+
+    # RDM6300 125KHz RFID reader
+    rfid = new RDM6300
+
+    # Power RFID from SWITCHED 5V (controllable via GPIO)
+    power_5v_switched ~ rfid.power
+
+    # ==========================================
+    # UART Level Shifter (3.3V MCU <-> 5V RFID)
+    # ==========================================
+
+    # BSS138-based bidirectional level shifter
+    uart_level_shifter = new UARTLevelShifter
+
+    # Power the level shifter from both voltage rails
+    # Note: Use unswitched 5V so level shifter is always ready
+    power_3v3 ~ uart_level_shifter.power_lv
+    power_5v ~ uart_level_shifter.power_hv
+
+    # MCU UART connections (3.3V side)
+    # MCU TX (D1) -> Level Shifter LV TX
+    # MCU RX (D0) <- Level Shifter LV RX
+    mcu.uart.tx.line ~ uart_level_shifter.lv_tx
+    mcu.uart.rx.line ~ uart_level_shifter.lv_rx
+
+    # RFID UART connections (5V side)
+    # Level Shifter HV RX -> RFID RX (data from MCU)
+    # Level Shifter HV TX <- RFID TX (data from RFID)
+    uart_level_shifter.hv_rx ~ rfid.uart.tx.line
+    uart_level_shifter.hv_tx ~ rfid.uart.rx.line
+
+    # RFID power control signal
+    # GPIO active HIGH = RFID ON, GPIO LOW = RFID OFF (default)
+    # Connect to GPIO6 (D6 on Pro Micro)
+    rfid_power_switch.enable ~ mcu.gpio6
+
+    # ==========================================
+    # LoRa Module Section
+    # ==========================================
+
+    # Wio SX1262 LoRa module (Meshtastic compatible)
+    lora = new WioSX1262
+
+    # Power LoRa from 3.3V (always on for Meshtastic comms)
+    power_3v3 ~ lora.power
+
+    # SPI connection to MCU
+    mcu.spi ~ lora.spi
+
+    # LoRa control signals connected to MCU GPIO
+    lora.cs ~ mcu.gpio10        # Chip select
+    lora.reset ~ mcu.gpio9      # Reset
+    lora.busy ~ mcu.gpio8       # Busy indicator
+    lora.dio1 ~ mcu.gpio7       # Interrupt
+
+    # ==========================================
+    # Decoupling Capacitors
+    # ==========================================
+
+    # Additional decoupling on 3.3V rail
+    c_3v3_decouple = new Capacitor
+    c_3v3_decouple.capacitance = 100nF +/- 20%
+    c_3v3_decouple.package = "C0402"
+    power_3v3 ~ c_3v3_decouple.power
+
+    # Bulk capacitor on 5V rail (before switch)
+    c_5v_bulk = new Capacitor
+    c_5v_bulk.capacitance = 47uF +/- 20%
+    c_5v_bulk.package = "C0805"
+    power_5v ~ c_5v_bulk.power
+
+    # Decoupling capacitor on switched 5V rail (after switch, near RDM6300)
+    c_rfid_decouple = new Capacitor
+    c_rfid_decouple.capacitance = 10uF +/- 20%
+    c_rfid_decouple.package = "C0805"
+    power_5v_switched ~ c_rfid_decouple.power
