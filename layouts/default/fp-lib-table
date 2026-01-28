@@ -22,6 +22,13 @@
         (descr "atopile: part lib: Ckmtw_B_2100S02P_A110")
     )
     (lib
+        (name "Ckmtw_B_2100S04P_A110")
+        (type "KiCad")
+        (uri "${KIPRJMOD}/../../parts/Ckmtw_B_2100S04P_A110")
+        (options "")
+        (descr "atopile: part lib: Ckmtw_B_2100S04P_A110")
+    )
+    (lib
         (name "Ckmtw_B_2100S05P_A110")
         (type "KiCad")
         (uri "${KIPRJMOD}/../../parts/Ckmtw_B_2100S05P_A110")

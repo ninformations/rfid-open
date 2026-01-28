@@ -1,0 +1,15 @@
+#pragma experiment("TRAITS")
+import has_designator_prefix
+import has_part_picked
+import is_atomic_part
+
+component Ckmtw_B_2100S04P_A110_package:
+    trait is_atomic_part<manufacturer="Ckmtw", partnumber="B-2100S04P-A110", footprint="HDR-TH_4P-P2.54-V-M.kicad_mod", symbol="210S-1x4P-2.54mm.kicad_sym">
+    trait has_part_picked::by_supplier<supplier_id="lcsc", supplier_partno="C124378", manufacturer="Ckmtw", partno="B-2100S04P-A110">
+    trait has_designator_prefix<prefix="H">
+
+    # pins
+    pin 1
+    pin 2
+    pin 3
+    pin 4
