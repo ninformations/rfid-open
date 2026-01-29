@@ -17,16 +17,20 @@ module HighSidePowerSwitch:
     pfet = new Alpha___Omega_Semicon_AO3401A_package
     nfet = new Changjiang_Electronics_Tech_2N7002_package
 
+    # Use 1M pull-up to minimize idle current (~5µA vs ~500µA with 10k)
+    # AO3401A gate capacitance ~300pF, τ = 300µs (acceptable for power cycling)
     r_pullup = new Resistor
-    r_pullup.resistance = 10kohms +/- 5%
+    r_pullup.resistance = 1Mohms +/- 5%
     r_pullup.package = "R0402"
 
     r_gate = new Resistor
-    r_gate.resistance = 1kohms +/- 5%
+    r_gate.resistance = 10kohms +/- 5%
     r_gate.package = "R0402"
 
+    # Use 1M for N-FET gate to minimize GPIO current
+    # 2N7002 gate capacitance ~20pF, τ = 20µs (acceptable)
     r_ngate = new Resistor
-    r_ngate.resistance = 10kohms +/- 5%
+    r_ngate.resistance = 1Mohms +/- 5%
     r_ngate.package = "R0402"
 
     signal _gnd

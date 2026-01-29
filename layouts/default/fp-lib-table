@@ -36,6 +36,13 @@
         (descr "atopile: part lib: Ckmtw_B_2100S05P_A110")
     )
     (lib
+        (name "FOJAN_FRC0402F2003TS")
+        (type "KiCad")
+        (uri "${KIPRJMOD}/../../parts/FOJAN_FRC0402F2003TS")
+        (options "")
+        (descr "atopile: part lib: FOJAN_FRC0402F2003TS")
+    )
+    (lib
         (name "JST_Sales_America_S2B_PH_K_S_LF__SN")
         (type "KiCad")
         (uri "${KIPRJMOD}/../../parts/JST_Sales_America_S2B_PH_K_S_LF__SN")
@@ -106,6 +113,27 @@
         (descr "atopile: part lib: UNI_ROYAL_0402WGF1002TCE")
     )
     (lib
+        (name "UNI_ROYAL_0402WGF1003TCE")
+        (type "KiCad")
+        (uri "${KIPRJMOD}/../../parts/UNI_ROYAL_0402WGF1003TCE")
+        (options "")
+        (descr "atopile: part lib: UNI_ROYAL_0402WGF1003TCE")
+    )
+    (lib
+        (name "UNI_ROYAL_0402WGF1004TCE")
+        (type "KiCad")
+        (uri "${KIPRJMOD}/../../parts/UNI_ROYAL_0402WGF1004TCE")
+        (options "")
+        (descr "atopile: part lib: UNI_ROYAL_0402WGF1004TCE")
+    )
+    (lib
+        (name "UNI_ROYAL_0402WGF2002TCE")
+        (type "KiCad")
+        (uri "${KIPRJMOD}/../../parts/UNI_ROYAL_0402WGF2002TCE")
+        (options "")
+        (descr "atopile: part lib: UNI_ROYAL_0402WGF2002TCE")
+    )
+    (lib
         (name "UNI_ROYAL_0402WGF2203TCE")
         (type "KiCad")
         (uri "${KIPRJMOD}/../../parts/UNI_ROYAL_0402WGF2203TCE")
@@ -118,6 +146,13 @@
         (uri "${KIPRJMOD}/../../parts/UNI_ROYAL_0402WGF3002TCE")
         (options "")
         (descr "atopile: part lib: UNI_ROYAL_0402WGF3002TCE")
+    )
+    (lib
+        (name "UNI_ROYAL_0402WGF4702TCE")
+        (type "KiCad")
+        (uri "${KIPRJMOD}/../../parts/UNI_ROYAL_0402WGF4702TCE")
+        (options "")
+        (descr "atopile: part lib: UNI_ROYAL_0402WGF4702TCE")
     )
     (lib
         (name "WioSX1262")

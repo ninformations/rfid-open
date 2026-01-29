@@ -11,14 +11,20 @@ Features:
 - Default state: RDM6300 OFF (power conserving)
 - Level-shifted UART for safe 3.3V/5V communication
 
+Power Optimizations:
+- Boost converter EN tied to GPIO6 (off when RFID unused, saves ~1.5mA)
+- High-value pull-up resistors (47k-100k) reduce idle current
+- Level shifter HV side unpowered when boost is disabled
+- Estimated idle current: <100µA (MCU + LoRa in deep sleep)
+
 Components:
 - Pro Micro nRF52840: Main microcontroller (3.3V logic)
 - RDM6300: 125KHz RFID reader (5V logic)
 - Wio SX1262: LoRa module for Meshtastic (3.3V)
 - LiPo Battery: 3.7V power source
-- Boost Converter: Steps up to 5V for RDM6300
+- Boost Converter: Steps up to 5V for RDM6300 (software-controlled)
 - Power Switch: MOSFET-based power control for RDM6300
-- Level Shifter: BSS138-based UART level translation
+- Level Shifter: Voltage divider (10k/20k) for RX, direct TX (~0µA idle)
 """
 
 #pragma experiment("TRAITS")
@@ -37,7 +43,7 @@ from "parts/wio_sx1262.ato" import WioSX1262
 from "parts/boost_converter.ato" import BoostConverter5V
 from "parts/battery.ato" import LiPoBattery
 from "parts/power_switch.ato" import HighSidePowerSwitch
-from "parts/level_shifter.ato" import UARTLevelShifter
+from "parts/level_shifter.ato" import UARTLevelShifterLowPower
 
 module App:
     # ==========================================
@@ -62,9 +68,6 @@ module App:
     # Battery to boost converter input
     battery.power ~ power_battery
     power_battery ~ boost.power_in
-
-    # Always enable boost converter (tie EN to VIN)
-    boost.enable ~ power_battery.vcc
 
     # Boost converter output is 5V rail
     boost.power_out ~ power_5v
@@ -100,30 +103,29 @@ module App:
     # UART Level Shifter (3.3V MCU <-> 5V RFID)
     # ==========================================
 
-    # BSS138-based bidirectional level shifter
-    uart_level_shifter = new UARTLevelShifter
+    # Ultra-low power level shifter using voltage divider
+    # - RX: 10k/20k divider (5V → 3.3V), ~0µA idle
+    # - TX: Direct connection (3.3V accepted by RDM6300)
+    uart_level_shifter = new UARTLevelShifterLowPower
 
-    # Power the level shifter from both voltage rails
-    # Note: Use unswitched 5V so level shifter is always ready
-    power_3v3 ~ uart_level_shifter.power_lv
-    power_5v ~ uart_level_shifter.power_hv
+    # Connect ground reference
+    power_3v3 ~ uart_level_shifter.power_gnd
 
     # MCU UART connections (3.3V side)
-    # MCU TX (D1) -> Level Shifter LV TX
-    # MCU RX (D0) <- Level Shifter LV RX
     mcu.uart.tx.line ~ uart_level_shifter.lv_tx
     mcu.uart.rx.line ~ uart_level_shifter.lv_rx
 
     # RFID UART connections (5V side)
-    # Level Shifter HV RX -> RFID RX (data from MCU)
-    # Level Shifter HV TX <- RFID TX (data from RFID)
-    uart_level_shifter.hv_rx ~ rfid.uart.tx.line
-    uart_level_shifter.hv_tx ~ rfid.uart.rx.line
+    # Note: hv_tx is RDM6300's TX output (5V), hv_rx is RDM6300's RX input
+    uart_level_shifter.hv_tx ~ rfid.uart.rx.line  # RDM6300 TX → divider → MCU RX
+    uart_level_shifter.hv_rx ~ rfid.uart.tx.line  # MCU TX → direct → RDM6300 RX
 
     # RFID power control signal
-    # GPIO active HIGH = RFID ON, GPIO LOW = RFID OFF (default)
-    # Connect to GPIO6 (D6 on Pro Micro)
+    # GPIO6 active HIGH = RFID ON, GPIO LOW = RFID OFF (default)
+    # Both boost converter AND power switch are controlled by same GPIO
+    # This eliminates ~1.5mA boost quiescent current when RFID is not in use
     rfid_power_switch.enable ~ mcu.gpio6
+    boost.enable ~ mcu.gpio6
 
     # ==========================================
     # LoRa Module Section

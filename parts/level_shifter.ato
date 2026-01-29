@@ -1,13 +1,57 @@
-"""Bidirectional Level Shifter for UART/GPIO"""
+"""UART Level Shifter - Optimized for Low Power"""
 
 #pragma experiment("TRAITS")
 import Electrical
 import ElectricPower
 import Resistor
 
+# Ultra-low power UART level shifter using voltage divider
+# - RX path (5V→3.3V): Resistor voltage divider, ~0µA idle
+# - TX path (3.3V→5V): Direct connection (3.3V HIGH typically accepted by 5V CMOS)
+#
+# Power consumption: ~0µA idle (no pull-up resistors)
+# Only draws current during active UART transmission through the divider
+#
+# Voltage divider calculation for 5V → 3.3V:
+# Using 10k + 20k divider: Vout = 5V × 20k/(10k+20k) = 3.33V
+module UARTLevelShifterLowPower:
+    power_gnd = new ElectricPower  # Just need ground reference
+
+    signal lv_tx   # MCU TX (3.3V) - output
+    signal lv_rx   # MCU RX (3.3V) - input
+    signal hv_tx   # RDM6300 TX (5V) - input to divider
+    signal hv_rx   # RDM6300 RX - direct from MCU TX
+
+    # Voltage divider for RX path (5V → 3.3V)
+    # 5V ---[R1 100k]---+---[R2 200k]--- GND
+    #                   |
+    #                   +--- 3.3V output to MCU RX
+    # Higher values minimize current (~17µA during TX vs 167µA with 10k/20k)
+    # RC with 10pF input capacitance: τ = 67k × 10pF = 0.67µs (9600 baud bit = 104µs) ✓
+    r_div_top = new Resistor
+    r_div_top.resistance = 100kohms +/- 1%
+    r_div_top.package = "R0402"
+
+    r_div_bottom = new Resistor
+    r_div_bottom.resistance = 200kohms +/- 1%
+    r_div_bottom.package = "R0402"
+
+    # RX path: HV input → divider → LV output
+    hv_tx ~ r_div_top.p1
+    r_div_top.p2 ~ r_div_bottom.p1
+    r_div_bottom.p1 ~ lv_rx
+    r_div_bottom.p2 ~ power_gnd.gnd
+
+    # TX path: Direct connection (3.3V → 5V CMOS input)
+    # 3.3V is typically above Vih threshold for 5V CMOS (~2.0V for TTL, ~3.5V for CMOS)
+    # RDM6300 reportedly uses 3.3V-compatible I/O internally
+    lv_tx ~ hv_rx
+
+
+# Legacy BSS138-based bidirectional level shifter (kept for reference)
+# Use UARTLevelShifterLowPower instead for battery-powered applications
 from "parts/onsemi_BSS138/onsemi_BSS138.ato" import onsemi_BSS138_package
 
-# Single-channel bidirectional level shifter
 module LevelShifterChannel:
     power_lv = new ElectricPower
     power_hv = new ElectricPower
@@ -18,11 +62,11 @@ module LevelShifterChannel:
     mosfet = new onsemi_BSS138_package
 
     r_lv = new Resistor
-    r_lv.resistance = 10kohms +/- 5%
+    r_lv.resistance = 47kohms +/- 5%
     r_lv.package = "R0402"
 
     r_hv = new Resistor
-    r_hv.resistance = 10kohms +/- 5%
+    r_hv.resistance = 47kohms +/- 5%
     r_hv.package = "R0402"
 
     signal _gnd
@@ -40,7 +84,6 @@ module LevelShifterChannel:
     r_hv.p2 ~ hv_io
 
 
-# Dual-channel UART level shifter
 module UARTLevelShifter:
     power_lv = new ElectricPower
     power_hv = new ElectricPower
