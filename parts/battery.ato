@@ -4,17 +4,17 @@
 import Electrical
 import ElectricPower
 
-from "parts/JST_Sales_America_S2B_PH_K_S_LF__SN/JST_Sales_America_S2B_PH_K_S_LF__SN.ato" import JST_Sales_America_S2B_PH_K_S_LF__SN_package
+from "parts/Header_2P_254/Header_2P_254.ato" import Header_2P_254_package
 
-# JST-PH 2-pin connector with signal aliases
-component JST_PH_2Pin from JST_Sales_America_S2B_PH_K_S_LF__SN_package:
-    signal p1 ~ pin 1
-    signal p2 ~ pin 2
+# 2.54mm pitch 2-pin header connector with signal aliases
+component BatteryConnector_254 from Header_2P_254_package:
+    signal vcc ~ pin 1
+    signal gnd ~ pin 2
 
 # LiPo battery module
 module LiPoBattery:
     power = new ElectricPower
-    connector = new JST_PH_2Pin
+    connector = new BatteryConnector_254
 
-    power.vcc ~ connector.p1
-    power.gnd ~ connector.p2
+    power.vcc ~ connector.vcc
+    power.gnd ~ connector.gnd

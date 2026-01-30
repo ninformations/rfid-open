@@ -43,6 +43,13 @@
         (descr "atopile: part lib: FOJAN_FRC0402F2003TS")
     )
     (lib
+        (name "Header_2P_254")
+        (type "KiCad")
+        (uri "${KIPRJMOD}/../../parts/Header_2P_254")
+        (options "")
+        (descr "atopile: part lib: Header_2P_254")
+    )
+    (lib
         (name "JST_Sales_America_S2B_PH_K_S_LF__SN")
         (type "KiCad")
         (uri "${KIPRJMOD}/../../parts/JST_Sales_America_S2B_PH_K_S_LF__SN")

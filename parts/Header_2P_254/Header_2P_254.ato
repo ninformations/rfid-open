@@ -1,0 +1,15 @@
+"""2.54mm Pitch 2-Pin Header Connector"""
+
+#pragma experiment("TRAITS")
+import has_designator_prefix
+import has_part_picked
+import is_atomic_part
+
+component Header_2P_254_package:
+    """2-pin header connector, 2.54mm pitch, through-hole"""
+    trait is_atomic_part<manufacturer="Ckmtw", partnumber="B-2100S02P-A110", footprint="HDR-TH_2P-P2.54-V.kicad_mod", symbol="Header_2P_254.kicad_sym">
+    trait has_part_picked::by_supplier<supplier_id="lcsc", supplier_partno="C124375", manufacturer="Ckmtw", partno="B-2100S02P-A110">
+    trait has_designator_prefix<prefix="J">
+
+    pin 1
+    pin 2
